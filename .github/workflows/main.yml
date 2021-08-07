@@ -1,0 +1,25 @@
+name: Publish
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+          registry-url: "https://npm.pkg.github.com"
+          # Defaults to the user or organization that owns the workflow file
+          scope: "@apraamcos"
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   
