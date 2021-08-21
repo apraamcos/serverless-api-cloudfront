@@ -25,6 +25,10 @@ class ServerlessApiCloudFrontPlugin {
     });
 
     this.prepareResources(resources);
+
+    console.log(1, this.serverless.service.provider)
+    console.log(2, resources.Resources.ApiDistribution.Properties)
+    resources.Resources.ApiDistribution.Properties.Tags = this.serverless.service.provider.tags;
     return _.merge(baseResources, resources);
   }
 
@@ -70,13 +74,6 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareWaf(distributionConfig);
     this.prepareCompress(distributionConfig);
     this.prepareMinimumProtocolVersion(distributionConfig);
-
-    const properties = resources.Resources.ApiDistribution.Properties;
-    this.prepareTags(properties);
-  }
-
-  prepareTags(properties) {
-    properties.Tags = this.getConfig('tags', []);
   }
 
   prepareLogging(distributionConfig) {
