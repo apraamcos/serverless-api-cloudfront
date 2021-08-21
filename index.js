@@ -79,6 +79,7 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareCompress(distributionConfig);
     this.prepareMinimumProtocolVersion(distributionConfig);
 
+    resources.Resources.ApiDistribution.Properties.CustomOriginConfig = {};
     resources.Resources.ApiDistribution.Properties.CustomOriginConfig.OriginSSLProtocols = "TLSv1.2";
     resources.Resources.ApiDistribution.Properties.CustomOriginConfig.OriginProtocolPolicy = "https-only";
   }
