@@ -52,7 +52,12 @@ custom:
       prefix: my-prefix
     cookies: none
     headers:
-      - x-api-key
+      - User-Agent
+      - Accept
+    ttl:
+      - min: 0
+      - max: 0
+      - default: 0
     querystring:
       - page
       - per_page

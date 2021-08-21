@@ -63,6 +63,7 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareOrigins(distributionConfig);
     this.prepareCookies(distributionConfig);
     this.prepareHeaders(distributionConfig);
+    this.prepareTTL(distributionConfig);
     this.prepareQueryString(distributionConfig);
     this.prepareComment(distributionConfig);
     this.prepareCertificate(distributionConfig);
@@ -124,6 +125,16 @@ class ServerlessApiCloudFrontPlugin {
         distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders;
       } else {
         distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders === 'none' ? [] : ['*'];
+      }
+    }
+
+  prepareTTL(distributionConfig) {
+      const ttl = this.getConfig('ttl');
+
+      if (ttl) {
+        distributionConfig.DefaultCacheBehavior.DefaultTTL = ttl.default;
+        distributionConfig.DefaultCacheBehavior.MaxTTL = ttl.max;
+        distributionConfig.DefaultCacheBehavior.MinTTL = ttl.min;
       }
     }
 
