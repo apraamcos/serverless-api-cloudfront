@@ -71,6 +71,7 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareCookies(distributionConfig);
     this.prepareHeaders(distributionConfig);
     this.prepareTTL(distributionConfig);
+    this.preparePolicies(distributionConfig);
     this.prepareQueryString(distributionConfig);
     this.prepareComment(distributionConfig);
     this.prepareCertificate(distributionConfig);
@@ -135,15 +136,27 @@ class ServerlessApiCloudFrontPlugin {
       }
     }
 
-  prepareTTL(distributionConfig) {
-      const ttl = this.getConfig('ttl', null);
+  preparePolicies(distributionConfig) {
+      const cachePolicyId = this.getConfig('cachePolicyId', null);
+      if (cachePolicyId) {
+        distributionConfig.DefaultCacheBehavior.CachePolicyId = cachePolicyId;
+      }
 
-      if (ttl) {
-        distributionConfig.DefaultCacheBehavior.DefaultTTL = ttl.default;
-        distributionConfig.DefaultCacheBehavior.MaxTTL = ttl.max;
-        distributionConfig.DefaultCacheBehavior.MinTTL = ttl.min;
+      const originRequestPolicyId = this.getConfig('originRequestPolicyId', null);
+      if (originRequestPolicyId) {
+        distributionConfig.DefaultCacheBehavior.OriginRequestPolicyId = originRequestPolicyId;
       }
     }
+
+  prepareTTL(distributionConfig) {
+    const ttl = this.getConfig('ttl', null);
+
+    if (ttl) {
+      distributionConfig.DefaultCacheBehavior.DefaultTTL = ttl.default;
+      distributionConfig.DefaultCacheBehavior.MaxTTL = ttl.max;
+      distributionConfig.DefaultCacheBehavior.MinTTL = ttl.min;
+    }
+  }
 
   prepareQueryString(distributionConfig) {
         const forwardQueryString = this.getConfig('querystring', 'all');
