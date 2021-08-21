@@ -26,17 +26,18 @@ class ServerlessApiCloudFrontPlugin {
 
     this.prepareResources(resources);
 
-    console.log(3, JSON.stringify(resources));
-    console.log(4, JSON.stringify(this.serverless));
-    console.log(1, JSON.stringify(this.serverless.service.provider))
-    console.log(2, JSON.stringify(resources.Resources.ApiDistribution.Properties))
-    resources.Resources.ApiDistribution.Properties.Tags = this.serverless.service.provider.tags;
+    if(this.serverless.service.provider.tags) {
+      resources.Resources.ApiDistribution.Properties.Tags = Object.entries(this.serverless.service.provider.tags).map(x=> {
+        return {
+          Key: x[0],
+          Value: x[1]
+        }
+      });
+    }
     return _.merge(baseResources, resources);
   }
 
   printSummary() {
-    const cloudTemplate = this.serverless;
-
     const awsInfo = _.find(this.serverless.pluginManager.getPlugins(), (plugin) => {
       return plugin.constructor.name === 'AwsInfo';
     });
