@@ -72,10 +72,10 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareMinimumProtocolVersion(distributionConfig);
 
     const properties = resources.Resources.ApiDistribution.Properties;
-    this.prepareMinimumProtocolVersion(properties);
+    this.prepareTags(properties);
   }
 
-  prepareCookies(properties) {
+  prepareTags(properties) {
     properties.Tags = this.getConfig('tags', []);
   }
 
