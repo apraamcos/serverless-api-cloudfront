@@ -70,6 +70,13 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareWaf(distributionConfig);
     this.prepareCompress(distributionConfig);
     this.prepareMinimumProtocolVersion(distributionConfig);
+
+    const properties = resources.Resources.ApiDistribution.Properties;
+    this.prepareMinimumProtocolVersion(properties);
+  }
+
+  prepareCookies(properties) {
+    properties.Tags = this.getConfig('tags', []);
   }
 
   prepareLogging(distributionConfig) {
@@ -129,7 +136,7 @@ class ServerlessApiCloudFrontPlugin {
     }
 
   prepareTTL(distributionConfig) {
-      const ttl = this.getConfig('ttl');
+      const ttl = this.getConfig('ttl', null);
 
       if (ttl) {
         distributionConfig.DefaultCacheBehavior.DefaultTTL = ttl.default;
