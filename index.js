@@ -26,10 +26,10 @@ class ServerlessApiCloudFrontPlugin {
 
     this.prepareResources(resources);
 
-    console.log(3, resources);
-    console.log(4, this.serverless);
-    console.log(1, this.serverless.service.provider)
-    console.log(2, resources.Resources.ApiDistribution.Properties)
+    console.log(3, JSON.stringify(resources));
+    console.log(4, JSON.stringify(this.serverless));
+    console.log(1, JSON.stringify(this.serverless.service.provider))
+    console.log(2, JSON.stringify(resources.Resources.ApiDistribution.Properties))
     resources.Resources.ApiDistribution.Properties.Tags = this.serverless.service.provider.tags;
     return _.merge(baseResources, resources);
   }
