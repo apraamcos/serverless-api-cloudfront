@@ -95,26 +95,46 @@ class ServerlessApiCloudFrontPlugin {
   prepareDomain(distributionConfig) {
     const domain = this.getConfig('domain', null);
     const httpApi = this.getConfig("httpApi", false);
+    const websocketApi = this.getConfig("websocketApi", false);
 
     if (domain !== null) {
       distributionConfig.Aliases = Array.isArray(domain) ? domain : [ domain ];
     } else {
       delete distributionConfig.Aliases;
     }
-    distributionConfig.Origins[0].DomainName = {
-      "Fn::Join": [
-        "",
-        [
-          {
-            Ref: httpApi && "HttpApi" || "ApiGatewayRestApi"
-          },
-          ".execute-api.",
-          {
-            "Ref": "AWS::Region"
-          },
-          ".amazonaws.com"
+    if (websocketApi) {
+      distributionConfig.Origins[0].DomainName = {
+        "Fn::Join": [
+          "",
+          [
+            "wss://",
+            {
+              Ref: "WebsocketsApi",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".amazonaws.com"
+          ]
         ]
-      ]
+      }
+    } else {
+      distributionConfig.Origins[0].DomainName = {
+        "Fn::Join": [
+          "",
+          [
+            {
+              Ref: httpApi && "HttpApi" || "ApiGatewayRestApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".amazonaws.com"
+          ]
+        ]
+      }
     }
   }
 
