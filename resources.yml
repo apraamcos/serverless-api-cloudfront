@@ -53,6 +53,9 @@ Resources:
     Properties:
       DomainName: ''
       RegionalCertificateArn: ''
+    EndpointConfiguration: 
+      - REGIONAL
+    SecurityPolicy: TLS_1_2
 
 Outputs:
   ApiDistribution:
