@@ -62,7 +62,7 @@ Resources:
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties: 
       ApiId: 
-        Fn::GetAtt: [ HttpApi ]
+        Ref: HttpApi
       DomainName: ''
       Stage: ''
 
