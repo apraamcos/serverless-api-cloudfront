@@ -84,6 +84,12 @@ class ServerlessApiCloudFrontPlugin {
 
     const apiMappingProperties = resources.Resources.ApiMapping.Properties;
     this.prepareApiMapping(apiMappingProperties);
+
+    const route53AProperties = resources.Resources.Route53RecordA.Properties;
+    this.prepareRoute53Record(route53AProperties);
+
+    const route53AAAAProperties = resources.Resources.Route53RecordAAAA.Properties;
+    this.prepareRoute53Record(route53AAAAProperties);
   }
 
   prepareCustomDomain(customDomainProperties) {
@@ -92,18 +98,22 @@ class ServerlessApiCloudFrontPlugin {
     customDomainProperties.DomainName = domain;
     customDomainProperties.DomainNameConfigurations[0].CertificateArn = regionalCertificate;
     if(this.serverless.service.provider.tags) {
-      customDomainProperties.Tags = Object.entries(this.serverless.service.provider.tags).map(x=> {
-        return {
-          Key: x[0],
-          Value: x[1]
-        }
-      });
+      const tags = {};
+      customDomainProperties.Tags = JSON.stringify(Object.entries(this.serverless.service.provider.tags).forEach(x=> {
+        tags[x[0]] = x[1];
+      }));
     }
   }
 
   prepareApiMapping(apiMappingProperties) {
     const domain = this.getConfig('domain', null);
     apiMappingProperties.DomainName = domain;
+  }
+
+  prepareRoute53Record(route53Properties) {
+    const domain = this.getConfig('domain', null);
+    route53Properties.Name = domain;
+    route53Properties.HostedZoneName = domain.split(".").slice(1).join(".");
   }
 
   prepareLogging(distributionConfig) {

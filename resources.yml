@@ -66,6 +66,28 @@ Resources:
       DomainName: ''
       Stage:
         Ref: HttpApiStage
+  Route53RecordA:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: ""
+      Name: ""
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2
+        DNSName:
+          Fn::GetAtt: [ ApiDistribution, DomainName ]
+        EvaluateTargetHealth: true
+      Type: A
+  Route53RecordAAAA:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: ""
+      Name: ""
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2
+        DNSName:
+          Fn::GetAtt: [ ApiDistribution, DomainName ]
+        EvaluateTargetHealth: true
+      Type: AAAA
 
 Outputs:
   ApiDistribution:
