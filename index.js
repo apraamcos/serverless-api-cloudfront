@@ -87,7 +87,7 @@ class ServerlessApiCloudFrontPlugin {
     const domain = this.getConfig('domain', null);
     const regionalCertificate = this.getConfig('regionalCertificate', null);
     customDomainProperties.DomainName = domain;
-    customDomainProperties.DomainNameConfigurations.CertificateArn = regionalCertificate;
+    customDomainProperties.DomainNameConfigurations.RegionalCertificateArn = regionalCertificate;
   }
 
   prepareLogging(distributionConfig) {

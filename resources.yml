@@ -55,15 +55,15 @@ Resources:
     Properties:
       DomainName: ''
       DomainNameConfigurations:
-        CertificateArn: ''
+        RegionalCertificateArn: ''
         EndpointType: REGIONAL
         SecurityPolicy: TLS_1_2
-  # ApiMapping:
-  #   Type: 'AWS::ApiGateway::BasePathMapping'
-  #   Properties:
-  #     BasePath: !Ref basePath
-  #     DomainName: !Ref myDomainName
-  #     RestApiId: !Ref myRestApi
+  ApiMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Properties: 
+      ApiId: String
+      DomainName: ''
+      Stage: ''
 
 Outputs:
   ApiDistribution:
