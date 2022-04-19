@@ -52,7 +52,7 @@ Resources:
     Type: 'AWS::ApiGateway::DomainName'
     Properties:
       DomainName: ''
-      CertificateArn: ''
+      RegionalCertificateArn: ''
 
 Outputs:
   ApiDistribution:
