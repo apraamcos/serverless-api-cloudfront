@@ -55,9 +55,9 @@ Resources:
     Properties:
       DomainName: ''
       DomainNameConfigurations:
-        CertificateArn: ''
-        EndpointType: REGIONAL
-        SecurityPolicy: TLS_1_2
+        - CertificateArn: ''
+          EndpointType: REGIONAL
+          SecurityPolicy: TLS_1_2
   ApiMapping:
     Type: AWS::ApiGatewayV2::ApiMapping
     Properties: 
