@@ -81,13 +81,21 @@ class ServerlessApiCloudFrontPlugin {
 
     const customDomainProperties = resources.Resources.CustomDomainName.Properties;
     this.prepareCustomDomain(customDomainProperties);
+
+    const apiMappingProperties = resources.Resources.ApiMapping.Properties;
+    this.prepareApiMapping(apiMappingProperties);
   }
 
   prepareCustomDomain(customDomainProperties) {
     const domain = this.getConfig('domain', null);
     const regionalCertificate = this.getConfig('regionalCertificate', null);
     customDomainProperties.DomainName = domain;
-    customDomainProperties.DomainNameConfigurations.RegionalCertificateArn = regionalCertificate;
+    customDomainProperties.DomainNameConfigurations.CertificateArn = regionalCertificate;
+  }
+
+  prepareApiMapping(apiMappingProperties) {
+    const domain = this.getConfig('domain', null);
+    apiMappingProperties.DomainName = domain;
   }
 
   prepareLogging(distributionConfig) {
