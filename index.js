@@ -113,7 +113,7 @@ class ServerlessApiCloudFrontPlugin {
   prepareRoute53Record(route53Properties) {
     const domain = this.getConfig('domain', null);
     route53Properties.Name = domain;
-    route53Properties.HostedZoneName = domain.split(".").slice(1).join(".");
+    route53Properties.HostedZoneName = `${domain.split(".").slice(1).join(".")}.`;
   }
 
   prepareLogging(distributionConfig) {
