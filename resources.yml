@@ -49,16 +49,21 @@ Resources:
           IncludeCookies: 'false'
           Bucket: ''
           Prefix: ''
-        WebACLId: waf-id
+        WebACLId: ''
   CustomDomainName:
-    Type: 'AWS::ApiGateway::DomainName'
+    Type: 'AWS::ApiGatewayV2::DomainName'
     Properties:
       DomainName: ''
-      RegionalCertificateArn: ''
-      EndpointConfiguration:
-        Types: 
-          - REGIONAL
-      SecurityPolicy: TLS_1_2
+      DomainNameConfigurations:
+        CertificateArn: ''
+        EndpointType: REGIONAL
+        SecurityPolicy: TLS_1_2
+  # ApiMapping:
+  #   Type: 'AWS::ApiGateway::BasePathMapping'
+  #   Properties:
+  #     BasePath: !Ref basePath
+  #     DomainName: !Ref myDomainName
+  #     RestApiId: !Ref myRestApi
 
 Outputs:
   ApiDistribution:
