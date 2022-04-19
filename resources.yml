@@ -64,7 +64,6 @@ Resources:
       ApiId: 
         Ref: HttpApi
       DomainName: ''
-      Stage: $default
 
 Outputs:
   ApiDistribution:
