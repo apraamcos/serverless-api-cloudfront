@@ -58,12 +58,12 @@ Resources:
         RegionalCertificateArn: ''
         EndpointType: REGIONAL
         SecurityPolicy: TLS_1_2
-  ApiMapping:
-    Type: AWS::ApiGatewayV2::ApiMapping
-    Properties: 
-      ApiId: String
-      DomainName: ''
-      Stage: ''
+  # ApiMapping:
+  #   Type: AWS::ApiGatewayV2::ApiMapping
+  #   Properties: 
+  #     ApiId: String
+  #     DomainName: ''
+  #     Stage: ''
 
 Outputs:
   ApiDistribution:
