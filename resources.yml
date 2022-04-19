@@ -48,6 +48,11 @@ Resources:
           Bucket: ''
           Prefix: ''
         WebACLId: waf-id
+  CustomDomainName:
+    Type: 'AWS::ApiGateway::DomainName'
+    Properties:
+      DomainName: ''
+      CertificateArn: ''
 
 Outputs:
   ApiDistribution:

@@ -78,6 +78,16 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareWaf(distributionConfig);
     this.prepareCompress(distributionConfig);
     this.prepareMinimumProtocolVersion(distributionConfig);
+
+    const customDomainProperties = resources.Resources.CustomDomainName.Properties;
+    this.prepareCustomDomain(customDomainProperties);
+  }
+
+  prepareCustomDomain(customDomainProperties) {
+    const domain = this.getConfig('domain', null);
+    const certificate = this.getConfig('certificate', null);
+    customDomainProperties.DomainName = domain;
+    customDomainProperties.CertificateArn = certificate;
   }
 
   prepareLogging(distributionConfig) {
