@@ -53,8 +53,9 @@ Resources:
     Properties:
       DomainName: ''
       RegionalCertificateArn: ''
-    EndpointConfiguration: 
-      - REGIONAL
+    EndpointConfiguration:
+      Types: 
+        - REGIONAL
     SecurityPolicy: TLS_1_2
 
 Outputs:
