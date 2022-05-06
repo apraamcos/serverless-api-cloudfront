@@ -85,11 +85,11 @@ class ServerlessApiCloudFrontPlugin {
     const apiMappingProperties = resources.Resources.ApiMapping.Properties;
     this.prepareApiMapping(apiMappingProperties);
 
-    const route53AProperties = resources.Resources.Route53RecordA.Properties;
-    this.prepareRoute53Record(route53AProperties);
+    // const route53AProperties = resources.Resources.Route53RecordA.Properties;
+    // this.prepareRoute53Record(route53AProperties);
 
-    const route53AAAAProperties = resources.Resources.Route53RecordAAAA.Properties;
-    this.prepareRoute53Record(route53AAAAProperties);
+    // const route53AAAAProperties = resources.Resources.Route53RecordAAAA.Properties;
+    // this.prepareRoute53Record(route53AAAAProperties);
   }
 
   prepareCustomDomain(customDomainProperties) {
