@@ -109,6 +109,7 @@ class ServerlessApiCloudFrontPlugin {
     const domain = this.getConfig('domain', null);
     apiMappingProperties.DomainName = domain;
     console.log("domain:", domain)
+    console.log("stage:", this.options.stage)
 
     const websocket = this.getConfig("websocket", false);
     if (websocket) {
