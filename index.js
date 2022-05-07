@@ -103,14 +103,10 @@ class ServerlessApiCloudFrontPlugin {
         tags[x[0]] = x[1];
       }));
     }
-
-    console.log("domain", domain)
-    console.log("regionalCertificate", regionalCertificate)
   }
 
   prepareApiMapping(apiMappingProperties) {
     const domain = this.getConfig('domain', null);
-    console.log("domain", domain)
     apiMappingProperties.DomainName = domain;
   }
 
