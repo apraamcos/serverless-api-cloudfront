@@ -112,7 +112,7 @@ class ServerlessApiCloudFrontPlugin {
     const websocket = this.getConfig("websocket", false);
     if (websocket) {
       apiMappingProperties.ApiId.Ref = "WebsocketsApi";
-      apiMappingProperties.Stage.Ref = this.options.stage;
+      apiMappingProperties.Stage = this.options.stage;
     }
   }
 
