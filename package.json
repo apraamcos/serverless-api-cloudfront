@@ -1,6 +1,6 @@
 {
   "name": "@apraamcos/serverless-api-cloudfront",
-  "version": "0.9.48",
+  "version": "0.9.49",
   "engines": {
     "node": ">=6.4"
   },
