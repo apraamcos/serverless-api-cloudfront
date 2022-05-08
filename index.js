@@ -75,23 +75,19 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareMinimumProtocolVersion(distributionConfig);
     this.prepareCompress(distributionConfig);
 
-    // legacy settings, disable for now
-    this.prepareTTL(distributionConfig);
-    this.prepareCookies(distributionConfig);
-    this.prepareHeaders(distributionConfig);
-    this.prepareQueryString(distributionConfig);
-
     const customDomainProperties = resources.Resources.CustomDomainName.Properties;
     this.prepareCustomDomain(customDomainProperties);
 
     const apiMappingProperties = resources.Resources.ApiMapping.Properties;
     this.prepareApiMapping(apiMappingProperties);
 
-    // const route53AProperties = resources.Resources.Route53RecordA.Properties;
-    // this.prepareRoute53Record(route53AProperties);
+    if (this.getConfig('route53', false)) {
+      const route53AProperties = resources.Resources.Route53RecordA.Properties;
+      this.prepareRoute53Record(route53AProperties);
 
-    // const route53AAAAProperties = resources.Resources.Route53RecordAAAA.Properties;
-    // this.prepareRoute53Record(route53AAAAProperties);
+      const route53AAAAProperties = resources.Resources.Route53RecordAAAA.Properties;
+      this.prepareRoute53Record(route53AAAAProperties);
+    }
   }
 
   prepareCustomDomain(customDomainProperties) {
@@ -163,59 +159,20 @@ class ServerlessApiCloudFrontPlugin {
       .map(_.partial(_.zipObject, ['HeaderName', 'HeaderValue']))
    }
 
-  prepareCookies(distributionConfig) {
-    const forwardCookies = this.getConfig('cookies', 'all');
-    distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.Forward = Array.isArray(forwardCookies) ? 'whitelist' : forwardCookies;
-    if (Array.isArray(forwardCookies)) {
-      distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames = forwardCookies;
-    }
-  }
-  
-  prepareHeaders(distributionConfig) {
-      const forwardHeaders = this.getConfig('headers', 'none');
-      
-      if (Array.isArray(forwardHeaders)) {
-        distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders;
-      } else {
-        distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders === 'none' ? [] : ['*'];
-      }
-    }
-
   preparePolicies(distributionConfig) {
-      const cachePolicyId = this.getConfig('cachePolicyId', null);
-      if (cachePolicyId) {
-        distributionConfig.DefaultCacheBehavior.CachePolicyId = cachePolicyId;
-      }
-
-      const originRequestPolicyId = this.getConfig('originRequestPolicyId', null);
-      if (originRequestPolicyId) {
-        distributionConfig.DefaultCacheBehavior.OriginRequestPolicyId = originRequestPolicyId;
-      }
+    const cachePolicyId = this.getConfig('cachePolicyId', null);
+    if (cachePolicyId) {
+      distributionConfig.DefaultCacheBehavior.CachePolicyId = cachePolicyId;
     }
 
-  prepareTTL(distributionConfig) {
-    const ttl = this.getConfig('ttl', null);
-
-    if (ttl) {
-      distributionConfig.DefaultCacheBehavior.DefaultTTL = ttl.default;
-      distributionConfig.DefaultCacheBehavior.MaxTTL = ttl.max;
-      distributionConfig.DefaultCacheBehavior.MinTTL = ttl.min;
+    const originRequestPolicyId = this.getConfig('originRequestPolicyId', null);
+    if (originRequestPolicyId) {
+      distributionConfig.DefaultCacheBehavior.OriginRequestPolicyId = originRequestPolicyId;
     }
   }
 
-  prepareQueryString(distributionConfig) {
-    const forwardQueryString = this.getConfig('querystring', 'all');
-    
-    if (Array.isArray(forwardQueryString)) {
-      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = true;
-      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys = forwardQueryString;
-    } else {
-      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = forwardQueryString === 'all' ? true : false;
-    }
-  }
-        
   prepareCompress(distributionConfig) {
-    distributionConfig.DefaultCacheBehavior.Compress = (this.getConfig('compress', false) === true) ? true : false;
+    distributionConfig.DefaultCacheBehavior.Compress = (this.getConfig('compress', true) === true) ? true : false;
   }
 
   prepareComment(distributionConfig) {

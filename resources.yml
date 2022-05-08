@@ -21,6 +21,7 @@ Resources:
           - domain.tld
         PriceClass: PriceClass_All
         DefaultCacheBehavior:
+          Compress: true
           AllowedMethods:
           - DELETE
           - GET
