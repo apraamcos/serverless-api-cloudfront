@@ -68,16 +68,18 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareDomain(distributionConfig);
     this.preparePriceClass(distributionConfig);
     this.prepareOrigins(distributionConfig);
-    this.prepareCookies(distributionConfig);
-    this.prepareHeaders(distributionConfig);
-    this.prepareTTL(distributionConfig);
     this.preparePolicies(distributionConfig);
-    this.prepareQueryString(distributionConfig);
     this.prepareComment(distributionConfig);
     this.prepareCertificate(distributionConfig);
     this.prepareWaf(distributionConfig);
-    this.prepareCompress(distributionConfig);
     this.prepareMinimumProtocolVersion(distributionConfig);
+    this.prepareCompress(distributionConfig);
+
+    // legacy settings, disable for now
+    this.prepareTTL(distributionConfig);
+    this.prepareCookies(distributionConfig);
+    this.prepareHeaders(distributionConfig);
+    this.prepareQueryString(distributionConfig);
 
     const customDomainProperties = resources.Resources.CustomDomainName.Properties;
     this.prepareCustomDomain(customDomainProperties);
@@ -98,10 +100,13 @@ class ServerlessApiCloudFrontPlugin {
     customDomainProperties.DomainName = domain;
     customDomainProperties.DomainNameConfigurations[0].CertificateArn = regionalCertificate;
     if(this.serverless.service.provider.tags) {
-      const tags = {};
-      customDomainProperties.Tags = JSON.stringify(Object.entries(this.serverless.service.provider.tags).forEach(x=> {
-        tags[x[0]] = x[1];
-      }));
+      customDomainProperties.Tags = [];
+      Object.entries(this.serverless.service.provider.tags).forEach(x=> {
+        customDomainProperties.Tags.push({
+          Key: x[0],
+          Value: x[1]
+        })
+      });
     }
   }
 
@@ -159,11 +164,11 @@ class ServerlessApiCloudFrontPlugin {
    }
 
   prepareCookies(distributionConfig) {
-      const forwardCookies = this.getConfig('cookies', 'all');
-      distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.Forward = Array.isArray(forwardCookies) ? 'whitelist' : forwardCookies;
-      if (Array.isArray(forwardCookies)) {
-        distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames = forwardCookies;
-      }
+    const forwardCookies = this.getConfig('cookies', 'all');
+    distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.Forward = Array.isArray(forwardCookies) ? 'whitelist' : forwardCookies;
+    if (Array.isArray(forwardCookies)) {
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames = forwardCookies;
+    }
   }
   
   prepareHeaders(distributionConfig) {
@@ -199,15 +204,19 @@ class ServerlessApiCloudFrontPlugin {
   }
 
   prepareQueryString(distributionConfig) {
-        const forwardQueryString = this.getConfig('querystring', 'all');
+    const forwardQueryString = this.getConfig('querystring', 'all');
+    
+    if (Array.isArray(forwardQueryString)) {
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = true;
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys = forwardQueryString;
+    } else {
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = forwardQueryString === 'all' ? true : false;
+    }
+  }
         
-        if (Array.isArray(forwardQueryString)) {
-          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = true;
-          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys = forwardQueryString;
-        } else {
-          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = forwardQueryString === 'all' ? true : false;
-        }
-      }
+  prepareCompress(distributionConfig) {
+    distributionConfig.DefaultCacheBehavior.Compress = (this.getConfig('compress', false) === true) ? true : false;
+  }
 
   prepareComment(distributionConfig) {
     const name = this.serverless.getProvider('aws').naming.getApiGatewayName();
@@ -232,10 +241,6 @@ class ServerlessApiCloudFrontPlugin {
     } else {
       delete distributionConfig.WebACLId;
     }
-  }
-  
-  prepareCompress(distributionConfig) {
-    distributionConfig.DefaultCacheBehavior.Compress = (this.getConfig('compress', false) === true) ? true : false;
   }
 
   prepareMinimumProtocolVersion(distributionConfig) {
