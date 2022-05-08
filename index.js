@@ -81,13 +81,9 @@ class ServerlessApiCloudFrontPlugin {
     const apiMappingProperties = resources.Resources.ApiMapping.Properties;
     this.prepareApiMapping(apiMappingProperties);
 
-    if (this.getConfig('route53', false)) {
-      const route53AProperties = resources.Resources.Route53RecordA.Properties;
-      this.prepareRoute53Record(route53AProperties);
+    const resources = resources.Resources;
+    this.prepareRoute53Record(resources);
 
-      const route53AAAAProperties = resources.Resources.Route53RecordAAAA.Properties;
-      this.prepareRoute53Record(route53AAAAProperties);
-    }
   }
 
   prepareCustomDomain(customDomainProperties) {
@@ -117,10 +113,42 @@ class ServerlessApiCloudFrontPlugin {
     }
   }
 
-  prepareRoute53Record(route53Properties) {
-    const domain = this.getConfig('domain', null);
-    route53Properties.Name = domain;
-    route53Properties.HostedZoneName = `${domain.split(".").slice(1).join(".")}.`;
+  prepareRoute53Record(resources) {
+    if (this.getConfig('route53', false)) {
+      const domain = this.getConfig('domain', null);
+      const hostedZoneName = `${domain.split(".").slice(1).join(".")}.`;
+      resources.Route53RecordA = {
+        Type: "AWS::Route53::RecordSet",
+        Properties:{
+           HostedZoneName: hostedZoneName,
+           Name: domain,
+           Type: "A",
+           AliasTarget: {
+             HostedZoneId: "Z2FDTNDATAQYW2",
+             DNSName:{
+               "Fn::GetAtt": [ ApiDistribution, DomainName ]
+              },
+             EvaluateTargetHealth: true
+          }
+        }
+      }
+      resources.Route53RecordAAAA = {
+        Type: "AWS::Route53::RecordSet",
+        Properties:{
+           HostedZoneName: hostedZoneName,
+           Name: domain,
+           Type: "AAAA",
+           AliasTarget: {
+             HostedZoneId: "Z2FDTNDATAQYW2",
+             DNSName:{
+               "Fn::GetAtt": [ ApiDistribution, DomainName ]
+              },
+             EvaluateTargetHealth: true
+          }
+        }
+      }
+
+    }
   }
 
   prepareLogging(distributionConfig) {
