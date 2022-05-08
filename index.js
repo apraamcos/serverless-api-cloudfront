@@ -123,7 +123,7 @@ class ServerlessApiCloudFrontPlugin {
            AliasTarget: {
              HostedZoneId: "Z2FDTNDATAQYW2",
              DNSName:{
-               "Fn::GetAtt": [ ApiDistribution, DomainName ]
+               "Fn::GetAtt": [ "ApiDistribution", "DomainName" ]
               },
              EvaluateTargetHealth: true
           }
@@ -138,7 +138,7 @@ class ServerlessApiCloudFrontPlugin {
            AliasTarget: {
              HostedZoneId: "Z2FDTNDATAQYW2",
              DNSName:{
-               "Fn::GetAtt": [ ApiDistribution, DomainName ]
+               "Fn::GetAtt": [ "ApiDistribution", "DomainName" ]
               },
              EvaluateTargetHealth: true
           }
