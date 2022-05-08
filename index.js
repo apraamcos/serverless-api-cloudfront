@@ -81,7 +81,6 @@ class ServerlessApiCloudFrontPlugin {
     const apiMappingProperties = resources.Resources.ApiMapping.Properties;
     this.prepareApiMapping(apiMappingProperties);
 
-    const resources = resources.Resources;
     this.prepareRoute53Record(resources);
   }
 
@@ -115,7 +114,7 @@ class ServerlessApiCloudFrontPlugin {
     if (this.getConfig('route53', false)) {
       const domain = this.getConfig('domain', null);
       const hostedZoneName = `${domain.split(".").slice(1).join(".")}.`;
-      resources.Route53RecordA = {
+      resources.Resources.Route53RecordA = {
         Type: "AWS::Route53::RecordSet",
         Properties:{
            HostedZoneName: hostedZoneName,
@@ -130,7 +129,7 @@ class ServerlessApiCloudFrontPlugin {
           }
         }
       }
-      resources.Route53RecordAAAA = {
+      resources.Resources.Route53RecordAAAA = {
         Type: "AWS::Route53::RecordSet",
         Properties:{
            HostedZoneName: hostedZoneName,
