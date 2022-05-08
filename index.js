@@ -83,7 +83,6 @@ class ServerlessApiCloudFrontPlugin {
 
     const resources = resources.Resources;
     this.prepareRoute53Record(resources);
-
   }
 
   prepareCustomDomain(customDomainProperties) {
@@ -105,7 +104,6 @@ class ServerlessApiCloudFrontPlugin {
   prepareApiMapping(apiMappingProperties) {
     const domain = this.getConfig('domain', null);
     apiMappingProperties.DomainName = domain;
-
     const websocket = this.getConfig("websocket", false);
     if (websocket) {
       apiMappingProperties.ApiId.Ref = "WebsocketsApi";
@@ -147,13 +145,11 @@ class ServerlessApiCloudFrontPlugin {
           }
         }
       }
-
     }
   }
 
   prepareLogging(distributionConfig) {
     const loggingBucket = this.getConfig('logging.bucket', null);
-
     if (loggingBucket !== null) {
       distributionConfig.Logging.Bucket = loggingBucket;
       distributionConfig.Logging.Prefix = this.getConfig('logging.prefix', '');
@@ -210,7 +206,6 @@ class ServerlessApiCloudFrontPlugin {
 
   prepareCertificate(distributionConfig) {
     const certificate = this.getConfig('certificate', null);
-
     if (certificate !== null) {
       distributionConfig.ViewerCertificate.AcmCertificateArn = certificate;
     } else {
@@ -220,7 +215,6 @@ class ServerlessApiCloudFrontPlugin {
 
   prepareWaf(distributionConfig) {
     const waf = this.getConfig('waf', null);
-
     if (waf !== null) {
       distributionConfig.WebACLId = waf;
     } else {
@@ -230,7 +224,6 @@ class ServerlessApiCloudFrontPlugin {
 
   prepareMinimumProtocolVersion(distributionConfig) {
     const minimumProtocolVersion = this.getConfig('minimumProtocolVersion', undefined);
-
     if (minimumProtocolVersion) {
       distributionConfig.ViewerCertificate.MinimumProtocolVersion = minimumProtocolVersion;
     }
