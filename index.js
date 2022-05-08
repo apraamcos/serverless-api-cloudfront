@@ -141,31 +141,6 @@ class ServerlessApiCloudFrontPlugin {
     } else {
       delete distributionConfig.Aliases;
     }
-
-
-    // const httpApi = this.getConfig("httpApi", false);
-    // const websocketApi = this.getConfig("websocketApi", false);
-    // let ref = "ApiGatewayRestApi";
-    // if (httpApi) {
-    //   ref = "HttpApi"
-    // } else if (websocketApi) {
-    //   ref = "WebsocketsApi"
-    // }
-    // distributionConfig.Origins[0].DomainName = {
-    //   "Fn::Join": [
-    //     "",
-    //     [
-    //       {
-    //         Ref: ref
-    //       },
-    //       ".execute-api.",
-    //       {
-    //         "Ref": "AWS::Region"
-    //       },
-    //       ".amazonaws.com"
-    //     ]
-    //   ]
-    // }
   }
 
   preparePriceClass(distributionConfig) {
@@ -181,11 +156,7 @@ class ServerlessApiCloudFrontPlugin {
       .map(_.toPairs)
       .map(_.head)
       .map(_.partial(_.zipObject, ['HeaderName', 'HeaderValue']))
-    // origin.OriginPath = `/${this.options.stage}`;
-    
-    // const httpApi = this.getConfig("httpApi", false);
-    // distributionConfig.Origins[0].OriginPath = httpApi ? "" : `/${this.options.stage}`;
-  }
+   }
 
   prepareCookies(distributionConfig) {
       const forwardCookies = this.getConfig('cookies', 'all');
