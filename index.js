@@ -90,13 +90,7 @@ class ServerlessApiCloudFrontPlugin {
     customDomainProperties.DomainName = domain;
     customDomainProperties.DomainNameConfigurations[0].CertificateArn = regionalCertificate;
     if(this.serverless.service.provider.tags) {
-      customDomainProperties.Tags = [];
-      Object.entries(this.serverless.service.provider.tags).forEach(x=> {
-        customDomainProperties.Tags.push({
-          Key: x[0],
-          Value: x[1]
-        })
-      });
+      customDomainProperties.Tags = this.serverless.service.provider.tags;
     }
   }
 
