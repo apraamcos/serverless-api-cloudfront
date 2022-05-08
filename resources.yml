@@ -46,6 +46,7 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: arn
           SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
         Logging:
           IncludeCookies: 'false'
           Bucket: ''
