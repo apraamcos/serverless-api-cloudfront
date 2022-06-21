@@ -184,6 +184,11 @@ class ServerlessApiCloudFrontPlugin {
     if (originRequestPolicyId) {
       distributionConfig.DefaultCacheBehavior.OriginRequestPolicyId = originRequestPolicyId;
     }
+
+    const responseHeadersPolicyId = this.getConfig('responseHeadersPolicyId', null);
+    if (responseHeadersPolicyId) {
+      distributionConfig.DefaultCacheBehavior.ResponseHeadersPolicyId = responseHeadersPolicyId;
+    }
   }
 
   prepareCompress(distributionConfig) {
