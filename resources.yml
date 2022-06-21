@@ -42,7 +42,15 @@ Resources:
           DefaultTTL: '0'
           TargetOriginId: ApiGateway
           ViewerProtocolPolicy: redirect-to-https
-        CustomErrorResponses: []
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 500
+            ResponseCode: 200
+            ResponsePagePath: '/500'
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 504
+            ResponseCode: 200
+            ResponsePagePath: '/504'
         ViewerCertificate:
           AcmCertificateArn: arn
           SslSupportMethod: sni-only
