@@ -65,7 +65,7 @@ class ServerlessApiCloudFrontPlugin {
     const distributionConfig = resources.Resources.ApiDistribution.Properties.DistributionConfig;
 
     this.prepareLogging(distributionConfig);
-    this.prepareDomainName(distributionConfig);
+    this.prepareDomain(distributionConfig);
     this.preparePriceClass(distributionConfig);
     this.prepareOrigins(distributionConfig);
     this.preparePolicies(distributionConfig);
@@ -75,8 +75,8 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareMinimumProtocolVersion(distributionConfig);
     this.prepareCompress(distributionConfig);
 
-    const domainNameProperties = resources.Resources.DomainName.Properties;
-    this.prepareDomainName(domainNameProperties);
+    const customDomainNameProperties = resources.Resources.CustomDomainName.Properties;
+    this.prepareCustomDomainName(customDomainNameProperties);
 
     const apiMappingProperties = resources.Resources.ApiMapping.Properties;
     this.prepareApiMapping(apiMappingProperties);
@@ -84,12 +84,12 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareRoute53Record(resources);
   }
 
-  prepareDomainName(domainNameProperties) {
+  prepareCustomDomainName(customDomainNameProperties) {
     const domain = this.getConfig('domain', null);
     const regionalCertificate = this.getConfig('regionalCertificate', null);
-    domainNameProperties.DomainName = domain;
-    domainNameProperties.DomainNameConfigurations[0].CertificateArn = regionalCertificate;
-    domainNameProperties.Tags = this.serverless.service.provider.tags;
+    customDomainNameProperties.DomainName = domain;
+    customDomainNameProperties.DomainNameConfigurations[0].CertificateArn = regionalCertificate;
+    customDomainNameProperties.Tags = this.serverless.service.provider.tags;
   }
 
   prepareApiMapping(apiMappingProperties) {
@@ -148,7 +148,7 @@ class ServerlessApiCloudFrontPlugin {
     }
   }
 
-  prepareDomainName(distributionConfig) {
+  prepareDomain(distributionConfig) {
     const domain = this.getConfig('domain', null);
     if (domain !== null) {
       distributionConfig.Aliases = Array.isArray(domain) ? domain : [ domain ];

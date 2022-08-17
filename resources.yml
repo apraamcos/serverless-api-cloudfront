@@ -13,7 +13,7 @@ Resources:
             OriginSSLProtocols: [ "TLSv1.2" ]
           OriginPath: ''
           DomainName: 
-            Fn::GetAtt: [ DomainName, RegionalDomainName ]
+            Fn::GetAtt: [ CustomDomainName, RegionalDomainName ]
         Enabled: true
         HttpVersion: http2and3
         Comment: cdn for api gateway
@@ -60,7 +60,7 @@ Resources:
           Bucket: ''
           Prefix: ''
         WebACLId: ''
-  DomainName:
+  CustomDomainName:
     Type: 'AWS::ApiGatewayV2::DomainName'
     Properties:
       DomainName: ''
@@ -74,7 +74,7 @@ Resources:
       ApiId: 
         Ref: HttpApi
       DomainName: 
-        Ref: DomainName
+        Fn::GetAtt: [ CustomDomainName, RegionalDomainName ]
       Stage:
         Ref: HttpApiStage
 
