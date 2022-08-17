@@ -65,7 +65,7 @@ class ServerlessApiCloudFrontPlugin {
     const distributionConfig = resources.Resources.ApiDistribution.Properties.DistributionConfig;
 
     this.prepareLogging(distributionConfig);
-    this.prepareDomain(distributionConfig);
+    this.prepareDomainName(distributionConfig);
     this.preparePriceClass(distributionConfig);
     this.prepareOrigins(distributionConfig);
     this.preparePolicies(distributionConfig);
@@ -75,8 +75,8 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareMinimumProtocolVersion(distributionConfig);
     this.prepareCompress(distributionConfig);
 
-    const customDomainProperties = resources.Resources.CustomDomainName.Properties;
-    this.prepareCustomDomain(customDomainProperties);
+    const domainNameProperties = resources.Resources.DomainName.Properties;
+    this.prepareDomainName(domainNameProperties);
 
     const apiMappingProperties = resources.Resources.ApiMapping.Properties;
     this.prepareApiMapping(apiMappingProperties);
@@ -84,16 +84,15 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareRoute53Record(resources);
   }
 
-  prepareCustomDomain(customDomainProperties) {
+  prepareDomainName(domainNameProperties) {
     const domain = this.getConfig('domain', null);
     const regionalCertificate = this.getConfig('regionalCertificate', null);
-    customDomainProperties.DomainName = domain;
-    customDomainProperties.DomainNameConfigurations[0].CertificateArn = regionalCertificate;
-    customDomainProperties.Tags = this.serverless.service.provider.tags;
+    domainNameProperties.DomainName = domain;
+    domainNameProperties.DomainNameConfigurations[0].CertificateArn = regionalCertificate;
+    domainNameProperties.Tags = this.serverless.service.provider.tags;
   }
 
   prepareApiMapping(apiMappingProperties) {
-    const domain = this.getConfig('domain', null);
     const websocket = this.getConfig("websocket", false);
     if (websocket) {
       apiMappingProperties.ApiId.Ref = "WebsocketsApi";
@@ -149,7 +148,7 @@ class ServerlessApiCloudFrontPlugin {
     }
   }
 
-  prepareDomain(distributionConfig) {
+  prepareDomainName(distributionConfig) {
     const domain = this.getConfig('domain', null);
     if (domain !== null) {
       distributionConfig.Aliases = Array.isArray(domain) ? domain : [ domain ];
