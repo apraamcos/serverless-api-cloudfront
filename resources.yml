@@ -73,10 +73,10 @@ Resources:
     Properties: 
       ApiId: 
         Ref: HttpApi
-      DomainName: 
-        Fn::GetAtt: [ CustomDomainName, RegionalDomainName ]
+      DomainName: ""
       Stage:
         Ref: HttpApiStage
+    DependsOn : ["CustomDomainName", "ApiDistribution"]
 
 Outputs:
   ApiDistribution:
