@@ -105,11 +105,14 @@ class ServerlessApiCloudFrontPlugin {
   prepareRoute53Record(resources) {
     if (this.getConfig('route53', false)) {
       const domain = this.getConfig('domain', null);
+      const hostedZoneId = this.getConfig('hostedZoneId', null);
+
       const hostedZoneName = `${domain.split(".").slice(1).join(".")}.`;
       resources.Resources.Route53RecordA = {
         Type: "AWS::Route53::RecordSet",
         Properties:{
-           HostedZoneName: hostedZoneName,
+           HostedZoneName: hostedZoneId ? undefined : hostedZoneName,
+           HostedZoneId: hostedZoneId ? hostedZoneId : undefined,
            Name: domain,
            Type: "A",
            AliasTarget: {
@@ -124,7 +127,8 @@ class ServerlessApiCloudFrontPlugin {
       resources.Resources.Route53RecordAAAA = {
         Type: "AWS::Route53::RecordSet",
         Properties:{
-           HostedZoneName: hostedZoneName,
+           HostedZoneName: hostedZoneId ? undefined : hostedZoneName,
+           HostedZoneId: hostedZoneId ? hostedZoneId : undefined,
            Name: domain,
            Type: "AAAA",
            AliasTarget: {
