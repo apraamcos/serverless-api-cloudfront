@@ -136,6 +136,9 @@ class ServerlessApiCloudFrontPlugin {
            HostedZoneName: hostedZoneId ? undefined : hostedZoneName,
            HostedZoneId: hostedZoneId ? hostedZoneId : undefined,
            Name: domain,
+           Failover: failover ? failover : undefined,
+           HealthCheckId: healthCheckId ? healthCheckId : undefined,
+           SetIdentifier: recordId ? recordId : undefined,
            Type: "AAAA",
            AliasTarget: {
              HostedZoneId: "Z2FDTNDATAQYW2",
