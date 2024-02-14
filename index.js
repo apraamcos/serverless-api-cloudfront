@@ -106,6 +106,7 @@ class ServerlessApiCloudFrontPlugin {
     if (this.getConfig('route53', false)) {
       const domain = this.getConfig('domain', null);
       const hostedZoneId = this.getConfig('hostedZoneId', null);
+      const failover = this.getConfig('failover', null);
 
       const hostedZoneName = `${domain.split(".").slice(1).join(".")}.`;
       resources.Resources.Route53RecordA = {
@@ -114,6 +115,7 @@ class ServerlessApiCloudFrontPlugin {
            HostedZoneName: hostedZoneId ? undefined : hostedZoneName,
            HostedZoneId: hostedZoneId ? hostedZoneId : undefined,
            Name: domain,
+           Failover: failover ? failover : undefined,
            Type: "A",
            AliasTarget: {
              HostedZoneId: "Z2FDTNDATAQYW2",
