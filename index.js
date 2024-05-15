@@ -162,8 +162,8 @@ class ServerlessApiCloudFrontPlugin {
       resources.Resources.Route53RecordA = {
         Type: "AWS::Shield::Protection",
         Properties:{
-           Name: domain,
-           ResourceArn: "!Ref ApiDistribution"
+           Name: "Shield",
+           ResourceArn: "!GetAtt MyCloudFrontDistribution.Arn"
         },
         DependsOn : ["CustomDomainName", "ApiDistribution"]
       }
