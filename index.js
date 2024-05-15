@@ -82,6 +82,7 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareApiMapping(apiMappingProperties);
 
     this.prepareRoute53Record(resources);
+    this.prepareShield(resources);
   }
 
   prepareCustomDomainName(customDomainNameProperties) {
@@ -128,7 +129,8 @@ class ServerlessApiCloudFrontPlugin {
               },
              EvaluateTargetHealth: true
           }
-        }
+        },
+        DependsOn : ["CustomDomainName", "ApiDistribution"]
       }
       resources.Resources.Route53RecordAAAA = {
         Type: "AWS::Route53::RecordSet",
@@ -147,7 +149,23 @@ class ServerlessApiCloudFrontPlugin {
               },
              EvaluateTargetHealth: true
           }
-        }
+        },
+        DependsOn : ["CustomDomainName", "ApiDistribution"]
+      }
+    }
+  }
+
+
+  prepareShield(resources) {
+    if (this.getConfig('shield', false)) {
+      const domain = this.getConfig('domain', null);
+      resources.Resources.Route53RecordA = {
+        Type: "AWS::Shield::Protection",
+        Properties:{
+           Name: domain,
+           ResourceArn: "!Ref ApiDistribution"
+        },
+        DependsOn : ["CustomDomainName", "ApiDistribution"]
       }
     }
   }
