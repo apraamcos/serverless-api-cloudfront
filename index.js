@@ -161,7 +161,13 @@ class ServerlessApiCloudFrontPlugin {
       resources.Resources.Shield = {
         Type: "AWS::Shield::Protection",
         Properties:{
-           Name: "Shield",
+           Name: {
+            "Fn::GetAtt": [ "ApiDistribution", "DomainName" ]
+           },
+           ApplicationLayerAutomaticResponseConfiguration: {
+              Action: { Block: {} },
+              Status: "ENABLED"
+           },
            ResourceArn: {
             'Fn::Join': [
               '',
