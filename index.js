@@ -158,12 +158,21 @@ class ServerlessApiCloudFrontPlugin {
 
   prepareShield(resources) {
     if (this.getConfig('shield', false)) {
-      const domain = this.getConfig('domain', null);
-      resources.Resources.Route53RecordA = {
+      resources.Resources.Shield = {
         Type: "AWS::Shield::Protection",
         Properties:{
            Name: "Shield",
-           ResourceArn: "!GetAtt MyCloudFrontDistribution.Arn"
+           ResourceArn: {
+            'Fn::Join': [
+              '',
+              [
+                'arn:aws:cloudfront::',
+                { 'Ref': 'AWS::AccountId' },
+                ':distribution/',
+                { 'Fn::GetAtt': ['ApiDistribution', 'Id'] }
+              ]
+            ]
+          }
         },
         DependsOn : ["CustomDomainName", "ApiDistribution"]
       }
