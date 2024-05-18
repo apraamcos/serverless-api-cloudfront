@@ -4,13 +4,26 @@ const chalk = require('chalk');
 const yaml = require('js-yaml');
 const fs = require('fs');
 
+const stringifyWithCircular = (obj) => {
+  const visitedObjects = new WeakSet();
+  return JSON.stringify(obj, function (key, value) {
+    if (typeof value === "object" && value !== null) {
+      if (visitedObjects.has(value)) {
+        return "[Circular Reference]";
+      }
+      visitedObjects.add(value);
+    }
+    return value;
+  });
+};
+
 class ServerlessApiCloudFrontPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
 
-    console.log(1, JSON.stringify(serverless));
-    console.log(2, JSON.stringify(options));
+    console.log(1, stringifyWithCircular(serverless));
+    console.log(2, stringifyWithCircular(options));
 
     this.hooks = {
       'package:createDeploymentArtifacts': this.createDeploymentArtifacts.bind(this),
