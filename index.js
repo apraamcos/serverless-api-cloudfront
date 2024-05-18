@@ -27,6 +27,9 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareResources(resources);
 
     if(this.serverless.service.provider.tags) {
+      this.serverless.service.provider.tags['stack-name'] = `${
+        this.provider.serverless.service.service
+      }-${this.provider.getStage()}`;
       resources.Resources.ApiDistribution.Properties.Tags = Object.entries(this.serverless.service.provider.tags).map(x=> {
         return {
           Key: x[0],
