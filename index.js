@@ -9,6 +9,9 @@ class ServerlessApiCloudFrontPlugin {
     this.serverless = serverless;
     this.options = options;
 
+    console.log(1, JSON.stringify(serverless));
+    console.log(2, JSON.stringify(options));
+
     this.hooks = {
       'package:createDeploymentArtifacts': this.createDeploymentArtifacts.bind(this),
       'aws:info:displayStackOutputs': this.printSummary.bind(this),
