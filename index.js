@@ -9,6 +9,12 @@ class ServerlessApiCloudFrontPlugin {
     this.serverless = serverless;
     this.options = options;
 
+    if(this.serverless.service.provider.tags) {
+      this.serverless.service.provider.tags['stack-name'] = `${
+        this.serverless.service.service
+      }-${this.serverless.service.provider.stage}`;
+    }
+
     this.hooks = {
       'package:createDeploymentArtifacts': this.createDeploymentArtifacts.bind(this),
       'aws:info:displayStackOutputs': this.printSummary.bind(this),
@@ -27,9 +33,6 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareResources(resources);
 
     if(this.serverless.service.provider.tags) {
-      this.serverless.service.provider.tags['stack-name'] = `${
-        this.provider.serverless.service.service
-      }-${this.provider.getStage()}`;
       resources.Resources.ApiDistribution.Properties.Tags = Object.entries(this.serverless.service.provider.tags).map(x=> {
         return {
           Key: x[0],
