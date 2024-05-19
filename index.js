@@ -163,6 +163,7 @@ class ServerlessApiCloudFrontPlugin {
 
 
   prepareShield(resources) {
+    const websocket = this.getConfig("websocket", false);
     if (this.getConfig('shield', false)) {
       resources.Resources.Shield = {
         Type: "AWS::Shield::Protection",
@@ -170,7 +171,7 @@ class ServerlessApiCloudFrontPlugin {
            Name: {
             "Fn::GetAtt": [ "ApiDistribution", "DomainName" ]
            },
-           ApplicationLayerAutomaticResponseConfiguration: {
+           ApplicationLayerAutomaticResponseConfiguration: websocket ? undefined : {
               Action: { Block: {} },
               Status: "ENABLED"
            },
